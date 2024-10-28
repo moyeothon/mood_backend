@@ -31,7 +31,6 @@ ext {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter'
     compileOnly 'org.projectlombok:lombok'
 
     // Database
@@ -49,6 +48,9 @@ dependencies {
     // Swagger
     implementation 'org.springdoc:springdoc-openapi-starter-common:2.0.2'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
+
+    // OpenAI
+    implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter'
 
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
