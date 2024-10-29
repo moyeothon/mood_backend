@@ -17,6 +17,14 @@ spring:
         format_sql: true
     open-in-view: false
 
+  ai:
+    openai:
+      api-key: ${spring.ai.openai.api-key}
+      chat:
+        options:
+          model: ${spring.ai.openai.chat.options.model}
+        base-url: ${spring.ai.openai.chat.base-url}
+
 logging:
   level:
     org.hibernate.sql: debug
@@ -40,8 +48,3 @@ oauth:
     redirect-uri: ${oauth.kakao.redirect-uri}
     id-token-url: ${oauth.kakao.id-token-url}
 
-openai:
-  model: ${openai.model}
-  api:
-    key: ${openai.api.key}
-    url: ${openai.api.url}
