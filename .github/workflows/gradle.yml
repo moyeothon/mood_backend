@@ -26,11 +26,16 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      # Configure Gradle for optimal use in GiHub Actions, including caching of downloaded dependencies.
-      # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
-
+      # gradle caching - 빌드 시간 향상
+      - name: Gradle Caching
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       # 환경별 yml 파일 생성 - prod
       - name: make application-prod.yml
@@ -43,7 +48,7 @@ jobs:
       # Gradlew 실행 허용
       - name: Run chmod to make gradlew executable
         run: chmod +x ./gradlew
-        
+
       - name: Build with Gradle Wrapper
         run: ./gradlew build -x test
 
