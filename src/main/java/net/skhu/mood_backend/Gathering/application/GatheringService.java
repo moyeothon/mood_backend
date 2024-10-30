@@ -168,12 +168,12 @@ public class GatheringService {
                                String vibe,
                                String averageAge,
                                String commonInterests) {
-        return prompt.replace("<host>", host)
-                .replace("<relationshipType>", relationshipType)
-                .replace("<peopleCount>", peopleCount)
-                .replace("<vibe>", vibe)
-                .replace("<averageAge>", averageAge)
-                .replace("<commonInterests>", commonInterests);
+        return prompt.replace("HOST", host)
+                .replace("RELATIONSHIPTYPE", relationshipType)
+                .replace("PEOPLECOUNT", peopleCount)
+                .replace("VIBE", vibe)
+                .replace("AVERAGEAGE", averageAge)
+                .replace("COMMONINTERESTS", commonInterests);
     }
 
     private HttpResponse<String> sendApiRequest(String body) throws IOException, InterruptedException {
