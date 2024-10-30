@@ -40,7 +40,7 @@ jwt:
 token:
   expire:
     time:
-      access: 86400000
+      access: ${token.expire.time.access}
 
 oauth:
   kakao:
