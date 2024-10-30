@@ -51,6 +51,14 @@ jobs:
       - name: Build with Gradle Wrapper
         run: ./gradlew build -x test
 
+      - name: make application-prod.yml
+        run: |
+          cd ./src/main/resources
+          touch ./application-prod.yml
+          echo "${{ secrets.YML_PROD }}" > ./application-prod.yml
+        shell: bash
+
+
       # Docker Login
       - name: Docker Hub Login
         uses: docker/login-action@v2
