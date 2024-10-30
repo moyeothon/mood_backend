@@ -26,7 +26,6 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-
       # Configure Gradle for optimal use in GiHub Actions, including caching of downloaded dependencies.
       # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
       - name: Setup Gradle
@@ -47,23 +46,12 @@ jobs:
           echo "${{ secrets.YML_PROD }}" > ./application-prod.yml
         shell: bash
 
-
-
-      # Docker Login
-      - name: Docker Hub Login
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      # Docker Build & Push
-      - name: Build and push
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:prod
+      # docker build & push to production
+      - name: Docker build & push to prod
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build --platform linux/amd64 -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:prod .
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:prod
 
   deploy:
     name: Deploy
