@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import net.skhu.mood_backend.gathering.api.dto.request.GatheringSaveReqDto;
 import net.skhu.mood_backend.gathering.api.dto.response.GatheringInfoResDto;
 import net.skhu.mood_backend.global.template.RspTemplate;
+import net.skhu.mood_backend.member.domain.Member;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -15,20 +17,23 @@ public interface GatheringControllerDocs {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "모임 생성 성공")
     })
-    RspTemplate<GatheringInfoResDto> createGathering(@RequestBody GatheringSaveReqDto gatheringSaveReqDto)
+    RspTemplate<GatheringInfoResDto> createGathering(@AuthenticationPrincipal Member member,
+                                                     @RequestBody GatheringSaveReqDto gatheringSaveReqDto)
             throws Exception;
 
     @Operation(summary = "모임 정보 확인", description = "모임 정보를 확인합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "모임 정보 반환 성공")
     })
-    RspTemplate<GatheringInfoResDto> gatheringInfo(@PathVariable(name = "id") Long gatheringId);
+    RspTemplate<GatheringInfoResDto> gatheringInfo(@AuthenticationPrincipal Member member,
+                                                   @PathVariable(name = "id") Long gatheringId);
 
     @Operation(summary = "모임 정보 수정", description = "모임의 정보를 수정합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "모임 정보 반환 성공")
     })
-    RspTemplate<GatheringInfoResDto> updateGathering(@PathVariable(name = "id") Long gatheringId,
+    RspTemplate<GatheringInfoResDto> updateGathering(@AuthenticationPrincipal Member member,
+                                                     @PathVariable(name = "id") Long gatheringId,
                                                      @RequestBody GatheringSaveReqDto gatheringSaveReqDto)
             throws Exception;
 
@@ -37,6 +42,7 @@ public interface GatheringControllerDocs {
             @ApiResponse(responseCode = "200", description = "모임 정보 반환 성공")
     })
     RspTemplate<GatheringInfoResDto> updateConversationTopicsAndSuggestedActivities(
+            @AuthenticationPrincipal Member member,
             @PathVariable(name = "id") Long gatheringId) throws Exception;
 
 }

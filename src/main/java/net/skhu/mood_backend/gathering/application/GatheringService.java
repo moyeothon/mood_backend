@@ -10,6 +10,7 @@ import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.util.List;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import net.skhu.mood_backend.gathering.api.dto.GptParsingDto;
 import net.skhu.mood_backend.gathering.api.dto.request.GatheringSaveReqDto;
@@ -25,7 +26,9 @@ import net.skhu.mood_backend.gathering.domain.SuggestedActivity;
 import net.skhu.mood_backend.gathering.domain.repository.ConversationTopicRepository;
 import net.skhu.mood_backend.gathering.domain.repository.GatheringRepository;
 import net.skhu.mood_backend.gathering.domain.repository.SuggestedActivityRepository;
+import net.skhu.mood_backend.gathering.exception.GatheringAccessDeniedException;
 import net.skhu.mood_backend.gathering.exception.GatheringNotFountException;
+import net.skhu.mood_backend.member.domain.Member;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,7 +63,8 @@ public class GatheringService {
 
     // 모임 생성
     @Transactional
-    public GatheringInfoResDto createGathering(GatheringSaveReqDto gatheringSaveReqDto) throws Exception {
+    public GatheringInfoResDto createGathering(Member member, GatheringSaveReqDto gatheringSaveReqDto)
+            throws Exception {
         String requestBody = buildPrompt(gatheringSaveReqDto.host(),
                 gatheringSaveReqDto.relationshipType(),
                 gatheringSaveReqDto.peopleCount(),
@@ -71,7 +75,7 @@ public class GatheringService {
 
         GptParsingDto parsedResponse = parseApiResponse(response);
 
-        Gathering gathering = createAndSaveGathering(gatheringSaveReqDto);
+        Gathering gathering = createAndSaveGathering(member, gatheringSaveReqDto);
 
         List<ConversationTopicInfoResDto> conversationTopicInfoResDtos =
                 mapConversationTopics(parsedResponse, gathering);
@@ -90,9 +94,11 @@ public class GatheringService {
 
     // 모임 수정
     @Transactional
-    public GatheringInfoResDto updateGathering(Long gatheringId, GatheringSaveReqDto gatheringSaveReqDto)
+    public GatheringInfoResDto updateGathering(Member member, Long gatheringId, GatheringSaveReqDto gatheringSaveReqDto)
             throws Exception {
         Gathering gathering = gatheringRepository.findById(gatheringId).orElseThrow(GatheringNotFountException::new);
+
+        validateMemberAccess(gathering, member);
 
         String requestBody = buildPrompt(gatheringSaveReqDto.host(),
                 gatheringSaveReqDto.relationshipType(),
@@ -131,8 +137,11 @@ public class GatheringService {
 
     // 다른 주제 추천
     @Transactional
-    public GatheringInfoResDto updateConversationTopicsAndSuggestedActivities(Long gatheringId) throws Exception {
+    public GatheringInfoResDto updateConversationTopicsAndSuggestedActivities(Member member, Long gatheringId)
+            throws Exception {
         Gathering gathering = gatheringRepository.findById(gatheringId).orElseThrow(GatheringNotFountException::new);
+
+        validateMemberAccess(gathering, member);
 
         String requestBody = buildPrompt(gathering.getHost(),
                 gathering.getRelationshipType(),
@@ -160,6 +169,12 @@ public class GatheringService {
                 gathering.getCommonInterests(),
                 conversationTopicInfoResDtos,
                 suggestedActivityInfoResDtos);
+    }
+
+    private void validateMemberAccess(Gathering gathering, Member member) {
+        if (!Objects.equals(gathering.getMember(), member)) {
+            throw new GatheringAccessDeniedException();
+        }
     }
 
     private String buildPrompt(String host,
@@ -197,7 +212,7 @@ public class GatheringService {
         }
     }
 
-    private Gathering createAndSaveGathering(GatheringSaveReqDto gatheringSaveReqDto) {
+    private Gathering createAndSaveGathering(Member member, GatheringSaveReqDto gatheringSaveReqDto) {
         Gathering gathering = Gathering.builder()
                 .host(gatheringSaveReqDto.host())
                 .relationshipType(gatheringSaveReqDto.relationshipType())
@@ -205,6 +220,7 @@ public class GatheringService {
                 .vibe(gatheringSaveReqDto.vibe())
                 .averageAge(gatheringSaveReqDto.averageAge())
                 .commonInterests(gatheringSaveReqDto.commonInterests())
+                .member(member)
                 .build();
 
         gatheringRepository.save(gathering);
