@@ -1,4 +1,4 @@
-package net.skhu.mood_backend.Gathering.exception;
+package net.skhu.mood_backend.gathering.exception;
 
 import net.skhu.mood_backend.global.error.exception.NotFoundGroupException;
 

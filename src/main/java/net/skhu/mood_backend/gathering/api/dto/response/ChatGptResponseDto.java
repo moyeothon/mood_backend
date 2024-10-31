@@ -1,4 +1,4 @@
-package net.skhu.mood_backend.Gathering.api.dto.response;
+package net.skhu.mood_backend.gathering.api.dto.response;
 
 import java.util.List;
 import lombok.AccessLevel;
@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import net.skhu.mood_backend.Gathering.api.dto.Message;
+import net.skhu.mood_backend.gathering.api.dto.Message;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

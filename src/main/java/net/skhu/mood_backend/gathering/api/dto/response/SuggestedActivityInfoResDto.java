@@ -1,4 +1,4 @@
-package net.skhu.mood_backend.Gathering.api.dto.response;
+package net.skhu.mood_backend.gathering.api.dto.response;
 
 import lombok.Builder;
 

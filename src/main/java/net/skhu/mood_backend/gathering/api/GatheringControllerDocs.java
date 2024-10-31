@@ -1,10 +1,10 @@
-package net.skhu.mood_backend.Gathering.api;
+package net.skhu.mood_backend.gathering.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import net.skhu.mood_backend.Gathering.api.dto.request.GatheringSaveReqDto;
-import net.skhu.mood_backend.Gathering.api.dto.response.GatheringInfoResDto;
+import net.skhu.mood_backend.gathering.api.dto.request.GatheringSaveReqDto;
+import net.skhu.mood_backend.gathering.api.dto.response.GatheringInfoResDto;
 import net.skhu.mood_backend.global.template.RspTemplate;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;

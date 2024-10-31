@@ -1,4 +1,4 @@
-package net.skhu.mood_backend.Gathering.api.dto.request;
+package net.skhu.mood_backend.gathering.api.dto.request;
 
 public record GatheringSaveReqDto(
         String host,

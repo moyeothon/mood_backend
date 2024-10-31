@@ -1,4 +1,4 @@
-package net.skhu.mood_backend.Gathering.api.dto;
+package net.skhu.mood_backend.gathering.api.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

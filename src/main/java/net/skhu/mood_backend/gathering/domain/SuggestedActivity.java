@@ -1,8 +1,8 @@
-package net.skhu.mood_backend.Gathering.domain;
+package net.skhu.mood_backend.gathering.domain;
 
 /*
-    ConversationTopic
-    대화 주제
+  SuggestedActivity
+  추천 활동
  */
 
 import jakarta.persistence.Entity;
@@ -21,13 +21,13 @@ import net.skhu.mood_backend.global.entity.BaseEntity;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ConversationTopic extends BaseEntity {
+public class SuggestedActivity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String topic;
+    private String activity;
 
     private String description;
 
@@ -36,14 +36,14 @@ public class ConversationTopic extends BaseEntity {
     private Gathering gathering;
 
     @Builder
-    private ConversationTopic(String topic, String description, Gathering gathering) {
-        this.topic = topic;
+    private SuggestedActivity(String activity, String description, Gathering gathering) {
+        this.activity = activity;
         this.description = description;
         this.gathering = gathering;
     }
 
-    public void updateConversationTopic(String topic, String description) {
-        this.topic = topic;
+    public void updateSuggestedActivity(String activity, String description) {
+        this.activity = activity;
         this.description = description;
     }
 

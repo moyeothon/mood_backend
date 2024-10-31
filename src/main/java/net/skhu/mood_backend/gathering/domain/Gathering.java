@@ -1,4 +1,4 @@
-package net.skhu.mood_backend.Gathering.domain;
+package net.skhu.mood_backend.gathering.domain;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
