@@ -74,7 +74,7 @@ jobs:
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           env: GITHUB_SHA
           script: |
-            CONTAINER_ID=$(sudo docker ps -q --filter "ancestor=${{ secrets.DOCKER_IMAGENAME }}:latest")
+            CONTAINER_ID=$(sudo docker ps -q --filter "ancestor=${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:prod")
             sudo docker stop $CONTAINER_ID
             sudo docker rm -f $CONTAINER_ID
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:prod
