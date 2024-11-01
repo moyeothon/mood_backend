@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import net.skhu.mood_backend.gathering.api.dto.request.GatheringSaveReqDto;
 import net.skhu.mood_backend.gathering.api.dto.response.GatheringInfoResDto;
+import net.skhu.mood_backend.gathering.api.dto.response.GatheringListResDto;
 import net.skhu.mood_backend.global.template.RspTemplate;
 import net.skhu.mood_backend.member.domain.Member;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -44,5 +45,11 @@ public interface GatheringControllerDocs {
     RspTemplate<GatheringInfoResDto> updateConversationTopicsAndSuggestedActivities(
             @AuthenticationPrincipal Member member,
             @PathVariable(name = "id") Long gatheringId) throws Exception;
+
+    @Operation(summary = "내 모임 불러오기", description = "내 최근 모임 5개를 불러옵니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "내 모임 불러오기 성공")
+    })
+    RspTemplate<GatheringListResDto> getMyGathering(@AuthenticationPrincipal Member member);
 
 }

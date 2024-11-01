@@ -9,6 +9,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +20,7 @@ import net.skhu.mood_backend.gathering.api.dto.response.ChatGptResponseDto;
 import net.skhu.mood_backend.gathering.api.dto.response.ConversationTopicInfoResDto;
 import net.skhu.mood_backend.gathering.api.dto.response.ConversationTopicListResDto;
 import net.skhu.mood_backend.gathering.api.dto.response.GatheringInfoResDto;
+import net.skhu.mood_backend.gathering.api.dto.response.GatheringListResDto;
 import net.skhu.mood_backend.gathering.api.dto.response.SuggestedActivityInfoResDto;
 import net.skhu.mood_backend.gathering.api.dto.response.SuggestedActivityListResDto;
 import net.skhu.mood_backend.gathering.domain.ConversationTopic;
@@ -83,7 +86,9 @@ public class GatheringService {
         List<SuggestedActivityInfoResDto> suggestedActivityInfoResDtos =
                 mapSuggestedActivities(parsedResponse, gathering);
 
-        return buildResponseDto(gathering.getHost(),
+        return buildResponseDto(gathering.getId(),
+                gathering.getCreatedAt(),
+                gathering.getHost(),
                 gathering.getRelationshipType(),
                 gathering.getPeopleCount(),
                 gathering.getVibe(),
@@ -126,7 +131,9 @@ public class GatheringService {
         List<SuggestedActivityInfoResDto> suggestedActivityInfoResDtos =
                 mapSuggestedActivities(parsedResponse, gathering);
 
-        return buildResponseDto(gathering.getHost(),
+        return buildResponseDto(gathering.getId(),
+                gathering.getCreatedAt(),
+                gathering.getHost(),
                 gathering.getRelationshipType(),
                 gathering.getPeopleCount(),
                 gathering.getVibe(),
@@ -162,7 +169,9 @@ public class GatheringService {
         List<SuggestedActivityInfoResDto> suggestedActivityInfoResDtos =
                 mapSuggestedActivities(parsedResponse, gathering);
 
-        return buildResponseDto(gathering.getHost(),
+        return buildResponseDto(gathering.getId(),
+                gathering.getCreatedAt(),
+                gathering.getHost(),
                 gathering.getRelationshipType(),
                 gathering.getPeopleCount(),
                 gathering.getVibe(),
@@ -286,7 +295,9 @@ public class GatheringService {
                 .toList();
     }
 
-    private GatheringInfoResDto buildResponseDto(String host,
+    private GatheringInfoResDto buildResponseDto(Long id,
+                                                 LocalDateTime createdAt,
+                                                 String host,
                                                  String relationshipType,
                                                  String peopleCount,
                                                  String vibe,
@@ -294,7 +305,10 @@ public class GatheringService {
                                                  String commonInterests,
                                                  List<ConversationTopicInfoResDto> conversationTopics,
                                                  List<SuggestedActivityInfoResDto> suggestedActivities) {
-        return GatheringInfoResDto.of(host,
+        return GatheringInfoResDto.of(
+                id,
+                createdAt,
+                host,
                 relationshipType,
                 peopleCount,
                 vibe,
@@ -311,14 +325,18 @@ public class GatheringService {
         List<ConversationTopicInfoResDto> conversationTopicInfoResDtos = getConversationTopicInfoResDtos(gatheringId);
         List<SuggestedActivityInfoResDto> suggestedActivityInfoResDtos = getSuggestedActivityInfoResDtos(gatheringId);
 
-        return GatheringInfoResDto.of(gathering.getHost(),
+        return buildResponseDto(
+                gathering.getId(),
+                gathering.getCreatedAt(),
+                gathering.getHost(),
                 gathering.getRelationshipType(),
                 gathering.getPeopleCount(),
                 gathering.getVibe(),
                 gathering.getAverageAge(),
                 gathering.getCommonInterests(),
-                ConversationTopicListResDto.from(conversationTopicInfoResDtos),
-                SuggestedActivityListResDto.from(suggestedActivityInfoResDtos));
+                conversationTopicInfoResDtos,
+                suggestedActivityInfoResDtos
+        );
     }
 
     private List<ConversationTopicInfoResDto> getConversationTopicInfoResDtos(Long gatheringId) {
@@ -335,6 +353,30 @@ public class GatheringService {
                         suggestedActivity.getActivity(),
                         suggestedActivity.getDescription()))
                 .toList();
+    }
+
+    public GatheringListResDto getMyGathering(Member member) {
+        List<Gathering> gatherings = gatheringRepository.findByMember(member);
+
+        List<GatheringInfoResDto> gatheringInfoResDtos = new ArrayList<>();
+        for (Gathering gathering : gatherings) {
+            gatheringInfoResDtos.add(GatheringInfoResDto.myOf(
+                    gathering.getId(),
+                    gathering.getCreatedAt(),
+                    gathering.getHost(),
+                    gathering.getRelationshipType(),
+                    gathering.getPeopleCount(),
+                    gathering.getVibe(),
+                    gathering.getAverageAge(),
+                    gathering.getCommonInterests()
+            ));
+
+            if (gatheringInfoResDtos.size() == 5) {
+                break;
+            }
+        }
+
+        return GatheringListResDto.from(gatheringInfoResDtos);
     }
 
 }

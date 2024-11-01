@@ -2,6 +2,7 @@ package net.skhu.mood_backend.gathering.api;
 
 import net.skhu.mood_backend.gathering.api.dto.request.GatheringSaveReqDto;
 import net.skhu.mood_backend.gathering.api.dto.response.GatheringInfoResDto;
+import net.skhu.mood_backend.gathering.api.dto.response.GatheringListResDto;
 import net.skhu.mood_backend.gathering.application.GatheringService;
 import net.skhu.mood_backend.global.template.RspTemplate;
 import net.skhu.mood_backend.member.domain.Member;
@@ -58,4 +59,10 @@ public class GatheringController implements GatheringControllerDocs {
                 "모임 주제 수정 완료",
                 gatheringService.updateConversationTopicsAndSuggestedActivities(member, gatheringId));
     }
+
+    @GetMapping("/my")
+    public RspTemplate<GatheringListResDto> getMyGathering(@AuthenticationPrincipal Member member) {
+        return new RspTemplate<>(HttpStatus.OK, "내 모임 조회 완료", gatheringService.getMyGathering(member));
+    }
+    
 }
