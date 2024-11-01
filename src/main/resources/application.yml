@@ -25,6 +25,8 @@ spring:
           model: ${spring.ai.openai.chat.options.model}
         base-url: ${spring.ai.openai.chat.base-url}
 
+prompt: ${prompt}
+
 logging:
   level:
     org.hibernate.sql: debug
@@ -47,5 +49,3 @@ oauth:
     client-id: ${oauth.kakao.client-id}
     redirect-uri: ${oauth.kakao.redirect-uri}
     id-token-url: ${oauth.kakao.id-token-url}
-
-prompt: ${prompt}
