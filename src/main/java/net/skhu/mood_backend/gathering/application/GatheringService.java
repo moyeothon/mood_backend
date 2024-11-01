@@ -71,11 +71,11 @@ public class GatheringService {
                 gatheringSaveReqDto.vibe(),
                 gatheringSaveReqDto.averageAge(),
                 gatheringSaveReqDto.commonInterests());
-        log.info("=============================1.buildPrompt");
+
         HttpResponse<String> response = sendApiRequest(requestBody);
-        log.info("=============================2.response" + response.body());
+
         GptParsingDto parsedResponse = parseApiResponse(response);
-        log.info("=============================3.parsedResponse");
+
         Gathering gathering = createAndSaveGathering(member, gatheringSaveReqDto);
 
         List<ConversationTopicInfoResDto> conversationTopicInfoResDtos =
@@ -184,33 +184,26 @@ public class GatheringService {
                                String vibe,
                                String averageAge,
                                String commonInterests) {
-        String prompt = "{"
+        return String.format("{"
                 + "\"model\": \"gpt-4o\","
                 + "\"messages\": ["
                 + "    {"
                 + "        \"role\": \"system\","
                 + "        \"content\": \"너는 지금부터 분위기 메이커야. 추천하는 대화 주제와 추천 활동을 알려줘!\\n"
-                + "                   누구와 만나는 자리인가요? : HOST\\n"
-                + "                   얼마나 친한가요? : RELATIONSHIPTYPE\\n"
-                + "                   몇 명이 참석하나요? : PEOPLECOUNT\\n"
-                + "                   어떤 분위기를 원하나요? : VIBE\\n"
-                + "                   평균 연령대가 어떻게 되나요? : AVERAGEAGE\\n"
-                + "                   공통 관심사는 무엇인가요? : COMMONINTERESTS\\n"
-                + "                   너의 반환 형식은 JSON이야. 추천하는 대화 주제와 설명을 여러개, \\n"
-                + "                   그리고 추천 활동을 자세하게 실제 활동으로 여러개 JSON 형식으로 반환해줘. \\n"
+                + "                   누구와 만나는 자리인가요? : %s\\n"
+                + "                   얼마나 친한가요? : %s\\n"
+                + "                   몇 명이 참석하나요? : %s\\n"
+                + "                   어떤 분위기를 원하나요? : %s\\n"
+                + "                   평균 연령대가 어떻게 되나요? : %s\\n"
+                + "                   공통 관심사는 무엇인가요? : %s\\n"
+                + "                   너의 반환 형식은 JSON이야. 추천하는 대화 주제와 설명을 3개, \\n"
+                + "                   그리고 추천 활동을 자세하게 실제 활동으로 3개 JSON 형식으로 반환해줘. \\n"
                 + "                   추천하는 대화 주제의 변수명은 conversationTopics 이고 속성은 topic 과 description 이야. \\n"
                 + "                   추천하는 활동의 변수명은 suggestedActivities 이고 속성은 activity 와 description 이야. \\n"
                 + "                   너의 반환값인 content 안에 JSON 반환 이외에 말은 안해도 돼.\""
                 + "    }"
                 + "]"
-                + "}";
-
-        return prompt.replace("HOST", host)
-                .replace("RELATIONSHIPTYPE", relationshipType)
-                .replace("PEOPLECOUNT", peopleCount)
-                .replace("VIBE", vibe)
-                .replace("AVERAGEAGE", averageAge)
-                .replace("COMMONINTERESTS", commonInterests);
+                + "}", host, relationshipType, peopleCount, vibe, averageAge, commonInterests);
     }
 
     private HttpResponse<String> sendApiRequest(String body) throws IOException, InterruptedException {
