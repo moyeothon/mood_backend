@@ -73,7 +73,7 @@ public class GatheringService {
                 gatheringSaveReqDto.commonInterests());
         log.info("=============================1.buildPrompt");
         HttpResponse<String> response = sendApiRequest(requestBody);
-        log.info("=============================2.response");
+        log.info("=============================2.response" + response.body());
         GptParsingDto parsedResponse = parseApiResponse(response);
         log.info("=============================3.parsedResponse");
         Gathering gathering = createAndSaveGathering(member, gatheringSaveReqDto);
