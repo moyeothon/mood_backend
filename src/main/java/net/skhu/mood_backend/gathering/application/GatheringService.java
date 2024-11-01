@@ -71,10 +71,11 @@ public class GatheringService {
                 gatheringSaveReqDto.vibe(),
                 gatheringSaveReqDto.averageAge(),
                 gatheringSaveReqDto.commonInterests());
+        log.info("=============================1.buildPrompt");
         HttpResponse<String> response = sendApiRequest(requestBody);
-
+        log.info("=============================2.response");
         GptParsingDto parsedResponse = parseApiResponse(response);
-
+        log.info("=============================3.parsedResponse");
         Gathering gathering = createAndSaveGathering(member, gatheringSaveReqDto);
 
         List<ConversationTopicInfoResDto> conversationTopicInfoResDtos =
