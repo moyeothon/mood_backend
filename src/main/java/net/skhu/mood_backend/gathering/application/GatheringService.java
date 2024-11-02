@@ -209,7 +209,7 @@ public class GatheringService {
                 + "                   그리고 추천 활동을 자세하게 실제 활동으로 3개 JSON 형식으로 반환해줘. \\n"
                 + "                   추천하는 대화 주제의 변수명은 conversationTopics 이고 속성은 topic 과 description 이야. \\n"
                 + "                   추천하는 활동의 변수명은 suggestedActivities 이고 속성은 activity 와 description 이야. \\n"
-                + "                   너의 반환값인 content 안에 JSON 반환 이외에 말은 안해도 돼.\""
+                + "                   너의 반환값인 content 안에 JSON 반환 이외에 말은 안해도 돼. 그리고 꼭 한글로 반환해줘.\""
                 + "    }"
                 + "]"
                 + "}", host, relationshipType, peopleCount, vibe, averageAge, commonInterests);
