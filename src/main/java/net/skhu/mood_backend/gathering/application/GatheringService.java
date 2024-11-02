@@ -182,7 +182,7 @@ public class GatheringService {
     }
 
     private void validateMemberAccess(Gathering gathering, Member member) {
-        if (!Objects.equals(gathering.getMember(), member)) {
+        if (!Objects.equals(gathering.getMember().getEmail(), member.getEmail())) {
             throw new GatheringAccessDeniedException();
         }
     }
