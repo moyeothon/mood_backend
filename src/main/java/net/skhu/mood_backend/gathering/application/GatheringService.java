@@ -376,7 +376,7 @@ public class GatheringService {
             }
         }
 
-        return GatheringListResDto.from(gatheringInfoResDtos);
+        return GatheringListResDto.from(gatheringInfoResDtos, member.getNickname());
     }
 
 }
